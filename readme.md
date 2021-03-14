@@ -1,7 +1,24 @@
-# Hack the North 2021 Backend Boilerplate
+# Hack the North 2021 Backend Challenge
 
-This boilerplate contains a SQLite + Flask install. The current directory is mounted as a volume under `/home/api` so
-that you do not have to rebuild the image every time. Building and running the image will start the Flask server on port
-5000.
+## Introduction
 
-Good luck!
+## Getting Started
+
+## API Usage 
+
+#### All Users Endpoint
+
+
+#### User Information Endpoint
+
+
+#### Updating User Data Endpoint
+
+
+#### Skills Endpoints
+
+
+## Built With
+
+## Challenges & Takeaways 
+
