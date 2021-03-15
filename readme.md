@@ -5,6 +5,30 @@ This repository holds a basic REST API server that stores and works with a hacka
 
 The server takes the data in hacker-data-2021.json and creates two tables to store the data, following a one-to-many relationship. The first database, **hackers**, stores each user's name, picture, company, email, and phone number. Through a foreign-key relationship, referencing **hackers'** rowid, it connects to the second database which stores **skills**, containing the names and ratings for each skill. The rowid is SQLite's default one, starting at 1 and autoincrementing. This is the ID that identifies each hacker and their associated skills.
 
+The two tables are structured as follow:
+
+```sql
+CREATE TABLE hackers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    picture TEXT, 
+    company TEXT,
+    email TEXT,
+    phone TEXT 
+)
+```
+
+```sql
+CREATE TABLE skills (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    hacker_id INTEGER,
+    name TEXT,
+    rating INTEGER,
+    FOREIGN KEY (hacker_id) REFERENCES hackers (id)
+)
+```
+
+
 ## Getting Started
 1. Clone this repository to your local directory
 2. Run `python main.py` 
@@ -13,7 +37,7 @@ The server takes the data in hacker-data-2021.json and creates two tables to sto
 ## API Usage 
 
 #### All Users Endpoint
-`GET http://127.0.0.1:5000/users/` will return all data, from both the **hackers** and **skills** tables, using an inner join
+`GET http://127.0.0.1:5000/users/` will return all data, from both the **hackers** and **skills** tables, using an inner join.
 
 #### User Information Endpoint
 `GET http://127.0.0.1:5000/users/<id>` will return both hacker data and skill data for the hacker with the specified integer ***id***, using an inner join. 
