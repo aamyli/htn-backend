@@ -1,5 +1,31 @@
 # Hack the North 2021 Backend Challenge
 
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+    </li>
+    <li>
+        <a href="#API-usage">API Usage</a>
+        <ul>
+            <li><a href="#all-users-endpoint">All Users Endpoint</a></li>
+            <li><a href="#user-information-endpoint">User Information Endpoint</a></li>
+            <li><a href="#updating-user-data-endpoint">Updating User Data Endpoint</a></li>
+            <li><a href="#skills-endpoint">Skills Endpoint</a></li>
+        </ul> 
+    </li>
+    <li><a href="#challenges-and-takeaways">Challenges and Takeaways</a></li>
+  </ol>
+</details>
+
 ## Introduction
 This repository holds a basic REST API server that stores and works with a hackathon's participant data. 
 
@@ -28,11 +54,20 @@ CREATE TABLE skills (
 )
 ```
 
+#### Built With
+1. Flask 
+2. SQLite
+3. Python json package
+
+Used REST principles. Used standard documentation & articles as references. 
 
 ## Getting Started
 1. Clone this repository to your local directory
 2. Run `python main.py` 
 3. The server will be running on port http://127.0.0.1:5000/
+
+
+
 
 ## API Usage 
 
@@ -74,14 +109,7 @@ Querying, as shown below will return list of all skills that are greater than th
 - `GET http://127.0.0.1:5000/skills/?max_frequency=<max>` 
 - `GET http://127.0.0.1:5000/skills/?min_frequency=<min>&max_frequency=<max>` 
 
-## Built With
-1. Flask 
-2. SQLite
-3. Python json package
-
-Used REST principles. Used documentations & articles as references. 
-
-## Challenges & Takeaways 
+## Challenges and Takeaways 
 
 I found this challenge to be very rewarding! It was my first time designing an API and using SQLite (or any SQL-based technology). Thus, the initial hours were spent understanding how SQLite and Flask connect and basic SQL documentation. While learning SQL was straight forward, there were often a lot of small syntactical and ordering errors that bottlenecked the process. I found this project to not be code-intensive, but design-focused, which was new and something I really enjoyed exploring.
 
