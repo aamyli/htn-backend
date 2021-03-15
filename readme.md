@@ -43,7 +43,28 @@ CREATE TABLE skills (
 `GET http://127.0.0.1:5000/users/<id>` will return both hacker data and skill data for the hacker with the specified integer ***id***, using an inner join. 
 
 #### Updating User Data Endpoint
-`PUT http://127.0.0.1:5000/users/<id>`, given data in a JSON format, will return the updated user data as the response. This supports partial updating through first getting the original data and setting it as the default - any new information will replace its associated default information. 
+`PUT http://127.0.0.1:5000/users/<id>`, given data in a JSON format, will return the updated hacker data as the response. The data's format will be as follows:
+
+```json
+{
+  "name": <string>,
+  "picture": <string>,
+  "company": <string>,
+  "email": <string>,
+  "phone": <string>,
+  "skills": [
+    {
+      "name": <string>,
+      "rating": <int>
+    }
+  ]
+}
+```
+
+where there can be 0+ skills, and not all pieces of information must be entered. To support this partial updating, the code implementation is split into two parts:
+
+1. For hacker data, first get the original data and set it as the default - any new information will replace its associated default information. 
+2. For skills data, loop through any new skills provided, and check if it already exists. If it exists, the skill is updated with its new rating. If it does not, the skill is inserted into the **skills** table as a new entry, with the current user ***id*** as the foreign key. 
 
 #### Skills Endpoints
 `GET http://127.0.0.1:5000/skills` will return a list of all skills and each of their frequencies.
@@ -54,7 +75,11 @@ Querying, as shown below will return list of all skills that are greater than th
 - `GET http://127.0.0.1:5000/skills/?min_frequency=<min>&max_frequency=<max>` 
 
 ## Built With
-Flask & SQLite, using REST principles. Used documentations & articles as references. 
+1. Flask 
+2. SQLite
+3. Python json package
+
+Used REST principles. Used documentations & articles as references. 
 
 ## Challenges & Takeaways 
 
