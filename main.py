@@ -55,7 +55,7 @@ for hacker in hackersData:
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/users', methods=['GET'])
 def create_db():
     c.execute("SELECT * FROM hackers INNER JOIN skills ON hackers.id = skills.hacker_id")
     result = c.fetchall()
