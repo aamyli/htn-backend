@@ -1,7 +1,9 @@
 # Hack the North 2021 Backend Challenge
 
 ## Introduction
-This repository holds a basic REST API server that stores and works with a hackathon's participant data. The server takes the data in hacker-data-2021.json and creates two tables to store the data, following a one-to-many relationship. The first database, **hackers**, stores each user's name, picture, company, email, and phone number. Through a foreign-key relationship, referencing **hackers'** rowid, it connects to the second database which stores **skills**, containing the names and ratings for each skill. The rowid is SQLite's default one, starting at 1 and autoincrementing. This is the ID that identifies each hacker and their associated skills.
+This repository holds a basic REST API server that stores and works with a hackathon's participant data. 
+
+The server takes the data in hacker-data-2021.json and creates two tables to store the data, following a one-to-many relationship. The first database, **hackers**, stores each user's name, picture, company, email, and phone number. Through a foreign-key relationship, referencing **hackers'** rowid, it connects to the second database which stores **skills**, containing the names and ratings for each skill. The rowid is SQLite's default one, starting at 1 and autoincrementing. This is the ID that identifies each hacker and their associated skills.
 
 ## Getting Started
 1. Clone this repository to your local directory
@@ -11,23 +13,24 @@ This repository holds a basic REST API server that stores and works with a hacka
 ## API Usage 
 
 #### All Users Endpoint
-`GET http://127.0.0.1:5000/users/` will return all data, from both the **hackers** and **skills** tables, using an INNER JOIN.
+`GET http://127.0.0.1:5000/users/` will return all data, from both the **hackers** and **skills** tables, using an inner join
 
 #### User Information Endpoint
-`GET http://127.0.0.1:5000/users/<id>` will return both hacker data and skill data for the hacker with the specified integer <id>, using an INNER JOIN. 
+`GET http://127.0.0.1:5000/users/<id>` will return both hacker data and skill data for the hacker with the specified integer ***id***, using an inner join. 
 
 #### Updating User Data Endpoint
 `PUT http://127.0.0.1:5000/users/<id>`, given data in a JSON format, will return the updated user data as the response. This supports partial updating through first getting the original data and setting it as the default - any new information will replace its associated default information. 
 
 #### Skills Endpoints
 `GET http://127.0.0.1:5000/skills` will return a list of all skills and each of their frequencies.
-Querying, as shown below will return list of all skills that are greater than the minimum frequency <min> and/or less than the maximum frequency <max>. 
-`GET http://127.0.0.1:5000/skills/?min_frequency=<min>` 
-`GET http://127.0.0.1:5000/skills/?max_frequency=<max>` 
-`GET http://127.0.0.1:5000/skills/?min_frequency=<min>&max_frequency=<max>` 
+Querying, as shown below will return list of all skills that are greater than the minimum frequency ***min*** and/or less than the maximum frequency ***max***. 
+
+- `GET http://127.0.0.1:5000/skills/?min_frequency=<min>` 
+- `GET http://127.0.0.1:5000/skills/?max_frequency=<max>` 
+- `GET http://127.0.0.1:5000/skills/?min_frequency=<min>&max_frequency=<max>` 
 
 ## Built With
-Flask & SQLite, using REST principles.
+Flask & SQLite, using REST principles. Used documentations & articles as references. 
 
 ## Challenges & Takeaways 
 
