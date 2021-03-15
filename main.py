@@ -1,4 +1,4 @@
-from flask import (Flask, jsonify, request)
+from flask import (Flask, jsonify, request, g)
 import sqlite3
 import json
 
@@ -29,6 +29,8 @@ c.execute("""CREATE TABLE skills (
             name TEXT,
             rating INTEGER,
             FOREIGN KEY (hacker_id) REFERENCES hackers (id)
+                ON DELETE SET NULL
+                ON UPDATE SET NULL
             )""")
 conn.commit()
 
@@ -61,25 +63,54 @@ def create_db():
 # (2) USER INFORMATION ENDPOINT & (3) UPDATE USER DATA ENDPOINT
 @app.route('/users/<id>', methods=['GET', 'PUT'])
 def get_user_info(id):
+    # GET REQUEST (2)
     if request.method == 'GET': # getting hacker (& skill) information based on ID
         c.execute("SELECT * FROM hackers INNER JOIN skills ON hackers.id = skills.hacker_id WHERE hackers.id='%s'" % id)
         result = c.fetchall()
         conn.commit()
         return jsonify(result)
+    # PUT REQUEST (3)
     else:
-        c.execute("SELECT * FROM hackers WHERE id='%s'" % id) # getting hacker information
-        user_data = c.fetchall()
         request_data = request.get_json() # getting information from put request 
+        
+        # getting hacker information
+        c.execute("SELECT * FROM hackers WHERE id='%s'" % id) 
+        user_data = c.fetchall()
         user = { # calls update_helper(put request data, data name, current data)
             'name': update_helper(request_data, 'name', user_data[0][1]),
             'picture': update_helper(request_data, 'picture', user_data[0][2]),
             'company': update_helper(request_data, 'company', user_data[0][3]),
             'email': update_helper(request_data, 'email', user_data[0][4]),
-            'phone': update_helper(request_data, 'phone', user_data[0][5])
+            'phone': update_helper(request_data, 'phone', user_data[0][5]),
         }
         c.execute("""UPDATE hackers SET name=?, picture=?, company=?, email=?, phone=? WHERE id=?""", # updates data 
                     [user['name'], user['picture'], user['company'], user['email'], user['phone'], id])
         conn.commit()
+
+        # getting hacker's skills information
+        c.execute("SELECT * FROM skills WHERE hacker_id='%s'" % id)
+        skill_data = c.fetchall()
+        if request_data != None:
+            try: # if skills are part of request data
+                res = request_data['skills']
+                for r in res: # for each skill object that was sent in the PUT request 
+                    current = False 
+                    for skill in skill_data: # checks to see if it is a current skill in database
+                        # if it is, then skill is updated 
+                        if r['name'] == skill[2]:
+                            c.execute("""UPDATE skills SET name=?, rating=? WHERE id=?""", # updates data 
+                                [r['name'], r['rating'], skill[0]])
+                            current = True
+                        break
+                    # if is new skill (ie. not in database), insert into database with current hacker ID as foreign key
+                    if not current:
+                        c.execute("INSERT INTO skills VALUES (NULL, ?, ?, ?)",
+                            [id, r['name'], r['rating']])
+            except KeyError:
+                print("no skills added")
+        conn.commit()
+
+        # getting updated data 
         c.execute("SELECT * FROM hackers INNER JOIN skills ON hackers.id = skills.hacker_id WHERE hackers.id='%s'" % id)
         result = c.fetchall()
         conn.commit()
@@ -99,7 +130,7 @@ def update_helper(request_data, data_point, default):
         return default
 
 # (4) SKILLS ENDPOINT
-@app.route('/skills', methods=['GET'])
+@app.route('/skills/', methods=['GET'])
 def get_skills():
     try: 
         min_frequency = request.args.get('min_frequency')
@@ -124,6 +155,8 @@ def get_skills():
     except Exception as e:
         print(e)
         return "An error occured."
+
+
 
 # runs flask app 
 if __name__ == "__main__":
