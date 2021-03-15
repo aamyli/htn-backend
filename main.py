@@ -89,6 +89,7 @@ def get_user_info(id):
 
         # getting hacker's skills information
         c.execute("SELECT * FROM skills WHERE hacker_id='%s'" % id)
+        conn.commit()
         skill_data = c.fetchall()
         if request_data != None:
             try: # if skills are part of request data
@@ -97,18 +98,21 @@ def get_user_info(id):
                     current = False 
                     for skill in skill_data: # checks to see if it is a current skill in database
                         # if it is, then skill is updated 
+                        print(r['name'])
+                        print(skill[2])
                         if r['name'] == skill[2]:
                             c.execute("""UPDATE skills SET name=?, rating=? WHERE id=?""", # updates data 
                                 [r['name'], r['rating'], skill[0]])
+                            conn.commit()
                             current = True
-                        break
+                            break
                     # if is new skill (ie. not in database), insert into database with current hacker ID as foreign key
                     if not current:
                         c.execute("INSERT INTO skills VALUES (NULL, ?, ?, ?)",
                             [id, r['name'], r['rating']])
+                        conn.commit()
             except KeyError:
                 print("no skills added")
-        conn.commit()
 
         # getting updated data 
         c.execute("SELECT * FROM hackers INNER JOIN skills ON hackers.id = skills.hacker_id WHERE hackers.id='%s'" % id)
@@ -155,7 +159,6 @@ def get_skills():
     except Exception as e:
         print(e)
         return "An error occured."
-
 
 
 # runs flask app 
