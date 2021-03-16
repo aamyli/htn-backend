@@ -59,7 +59,8 @@ CREATE TABLE skills (
 2. SQLite
 3. Python json package
 
-Used REST principles. Used standard documentation & articles as references. 
+Designed with REST principles. 
+Used standard documentation & articles as references; used Postman to test requests.  
 
 ## Getting Started
 1. Clone this repository to your local directory
@@ -99,7 +100,7 @@ Used REST principles. Used standard documentation & articles as references.
 where there can be 0+ skills, and not all pieces of information must be entered. To support this partial updating, the code implementation is split into two parts:
 
 1. For hacker data, first get the original data and set it as the default - any new information will replace its associated default information. 
-2. For skills data, loop through any new skills provided, and check if it already exists. If it exists, the skill is updated with its new rating. If it does not, the skill is inserted into the **skills** table as a new entry, with the current user ***id*** as the foreign key. 
+2. For skills data, loop through any new skills provided, and check if it already exists. If it exists, the skill is updated with its new rating. If it does not, the skill is inserted into the **skills** table as a new entry, with the current user ***id*** as the foreign key. Note: this was implemented taking into account that skills do not update often, and that realistically, there is not a significant number of skills per user, since it utilises a linear search through the current skills.
 
 #### Skills Endpoints
 `GET http://127.0.0.1:5000/skills` will return a list of all skills and each of their frequencies.
